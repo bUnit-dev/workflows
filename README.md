@@ -1,50 +1,65 @@
 # workflows
 
+Goal:
+
+1. Follow github flow, e.g. PRs into mainline branch.
+2. Release of mainline
+3. Keep a change log, whose version numbers are automatically updated when a release is pushed
+4. Automatically create github releases, add tags to repo
+5. Automatically push nightly builds on push to mainline to GPR
+6. Allow for live documentation to be updated independently of releases
+7. Allow for docs to be updated with a release.
+8. Release workflows should be idempotent, be re-runable in case of errors
+
+## common verification steps in PR / build on mainline
+1. build
+2. test
+3. verify template
+4. build docs
+5. build nuget packages   
+
 ## Changes to code or documentation for next release:
 
 1. Build of mainline
-2. Create PR, include update to changelog.md
-   1. build
-   2. test
-   3. build docs
-   4. build nuget packages
+2. Create PR, include update to changelog.md 
+
+## On merge to mail
+
+1. Run code analyzers
+2. build nuget packages
+3. push nightly nuget packages to github package repository
 
 ## Create a release:
 
 1. Trigger prepare-release workflow (input: versionIncrement, releaseImmediately):
-   1. nbgv prepare-release --nextVersion $version
-   2. update changelog.md with new version (nbgv get-version) using keep-a-changelog-new-release
-   3. commit
-   4. build
-   5. test
-   6. build docs
-   7. build nuget packages
-   8. push release branch
-   9. create pull request for release branch
-      1. If releaseImmediately, merge PR immediately.
-   10. on RELEASE pull request merge create github release
-      2. get version
-      3. read changelog from https://github.com/mindsers/changelog-reader-action
-      4. create github release with version and description
-   11. on RELEASE pull request merge, push latest mainline to docs_live
-   12. on GITHUB release
-      5. 
+2. nbgv prepare-release --versionIncrement versionIncrement
+3. $version = nbgv get-version
+4. git push main
+5. git checkout release/($version)   
+6. push release branch
 
+## Release
 
+1. build
+2. test
+3. verify template
+4. build docs
+5. build nuget packages   
+6. update changelog.md with new version ($version) using keep-a-changelog-new-release
+7.  Create version tag 
+8.  get version
+9.  read changelog from https://github.com/mindsers/changelog-reader-action
+10. create github release with tag, title, and description
+11. Build nuget packages
+12. push nuget packages
+13. merge release branch with origin:mainline
+14. merge mainline to docs_live
+15. merge release branch with origin:docs_live
+16. delete release branch
+   
 ## Updates to live docs
 
-1. On push (merge of PR or direct push)
+1. On push (merge of PR or direct push) to docs_live branch
    1. build docs and push to GH Pages
    2. merge with FF back to main
-
-## Create emergency patch to existing release
-
-1. Create branch of tag for the release to fix
-2. 
-
-steps:
-
-&version = nbgv get-version
-ensure changelog has matching major.minor.patch set
-nbgv tag
-git push
+   3. if merge fails, create PR from docs_live to mainline
