@@ -58,12 +58,14 @@ jobs:
         with:
           head: release/v${{ env.NBGV_MajorMinorVersion }}
           base: ${{ github.ref }}
-          title: Release of ${{ github.event.inputs.versionIncrement }} version v${{ env.NBGV_MajorMinorVersion }}
+          title: Release of new ${{ github.event.inputs.versionIncrement }} version v${{ env.NBGV_MajorMinorVersion }}
           reviewers: ${{ github.actor }} # By default, we request a review from the person who triggered the workflow.
           body: |
             Hi @${{ github.actor }}
-            This PR was created in response to a manual trigger of the release workflow here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}.
-            Merging this PR will create a GitHub release, update the CHANGELOG.md file, and push new packages to NuGet.
             
-            **NOTE:** Only small fixes are allowed to the release branch at this point. If you need to make minor or major changes, close the PR and make those
+            This PR was created in response to a manual trigger of the [prepare-release workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            
+            Merging this PR will create a GitHub Release and push new packages to NuGet.
+            
+            **NOTE:** Only small fixes should be added to this PR at this point. If you need to make minor or major changes, close the PR and make those
             changes to ${{ github.ref }} instead, and run the prepare-release workflow again once you are done.
