@@ -30,8 +30,21 @@ jobs:
           setAllVars: true
           
       - name: 🛠️ Increment version.json on main + create release branch
-        run: nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
-         
+        run: |
+          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
+          git checkout release/v$NBGV_MajorMinorVersion
+          
+      - name: 🛠️ Update changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
+        with:
+          version: ${{ env.NBGV_MajorMinorVersion }}
+
+      - name: 🛠️ Commit changelog to release branch
+        id: make-commit
+        run: |
+          git add CHANGELOG.md
+          git commit --message "Prepare ${{ github.event.inputs.versionIncrement }} release v${{ env.NBGV_MajorMinorVersion }}"
+
       - name: ⏩ Push version.json updates to main
         run: git push origin main
         
