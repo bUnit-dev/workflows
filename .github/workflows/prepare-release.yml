@@ -29,23 +29,23 @@ jobs:
         with:
           setAllVars: true
           
-      - name: 🛠️ Increment version.json on $github.ref + create release/v$NBGV_MajorMinorVersion branch
+      - name: 🛠️ Increment version.json on main + create release branch
         run: nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
          
       - name: ⏩ Push version.json updates to main
         run: git push origin main
         
-      - name: ⏩ Push release/v$NBGV_MajorMinorVersion branch to origin
+      - name: ⏩ Push release branch to origin
         run: git push origin release/v$NBGV_MajorMinorVersion
 
-      - name: ⏭ Create pull request for brancch release/v$NBGV_MajorMinorVersion
+      - name: ⏭ Create pull request for release branch
         uses: thomaseizinger/create-pull-request@1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          head: release/v${{ $NBGV_MajorMinorVersion }}
+          head: release/v${{ env.NBGV_MajorMinorVersion }}
           base: ${{ github.ref }}
-          title: Release of ${{ github.event.inputs.versionIncrement }} version v$NBGV_MajorMinorVersion
+          title: Release of ${{ github.event.inputs.versionIncrement }} version v${{ env.NBGV_MajorMinorVersion }}
           reviewers: ${{ github.actor }} # By default, we request a review from the person who triggered the workflow.
           body: |
             Hi @${{ github.actor }}
