@@ -11,6 +11,7 @@ on:
         
 jobs:  
   prepare-release:
+    name: 🚚 Prepare new release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && contains(fromJson('["major","minor"]'), github.event.inputs.versionIncrement)
     steps:   
