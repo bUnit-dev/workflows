@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       versionIncrement:
-        description: 'The version increment. Allowed values are "major", "minor" and "build".'
+        description: 'The version increment. Allowed values are "major" and "minor".'
         required: true
         default: 'minor'     
 jobs:
@@ -13,9 +13,9 @@ jobs:
 
     steps:
       - name: 🧪 Validate arguments
-        if: ${{ !contains(fromJson('["major","minor","build"]'), github.event.inputs.versionIncrement) }}
+        if: ${{ !contains(fromJson('["major","minor"]'), github.event.inputs.versionIncrement) }}
         run: |
-          echo Unexpected versionIncrement specified. It be either "major", "minor" or "build". ${{ github.event.inputs.versionIncrement }} is not a valid value.
+          echo Unexpected versionIncrement specified. It be either "major" or "minor". ${{ github.event.inputs.versionIncrement }} is not a valid value.
           exit 1
     
       - name: 🛒 Checkout repository
@@ -36,8 +36,12 @@ jobs:
           nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
           echo "version=$NBGV_MajorMinorVersion" >> $GITHUB_ENV
         
-#       - name: ⏩ Push updates to mainline
-#         run: git push origin main
+        # Only push to main if the release if from main. If it is not, it is likely a emergancy patch 
+        # from another branch, in which case updates to version.json should not be propagated to
+        # the main branch, as it might be newer.
+      - name: ⏩ Push updates to main
+        if: github.ref == 'refs/heads/main'
+        run: git push origin main
         
-#       - name: ⏩ Push release branch to origin
-#         run: git push origin release/v${{ version }}
+      - name: ⏩ Push release branch to origin
+        run: git push origin release/v${{ version }}
