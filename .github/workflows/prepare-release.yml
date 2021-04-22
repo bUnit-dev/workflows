@@ -42,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          head: release/v${{ NBGV_MajorMinorVersion }}
+          head: release/v$NBGV_MajorMinorVersion
           base: ${{ github.ref }}
           title: Release of ${{ github.event.inputs.versionIncrement }} version v${{ NBGV_MajorMinorVersion }}
           reviewers: ${{ github.actor }} # By default, we request a review from the person who triggered the workflow.
