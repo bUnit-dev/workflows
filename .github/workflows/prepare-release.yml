@@ -18,6 +18,11 @@ jobs:
           echo versionIncrement must be either "major", "minor" or "build".
           exit 1
     
+      - name: Configure GIT
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email noreply@github.com
+    
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
