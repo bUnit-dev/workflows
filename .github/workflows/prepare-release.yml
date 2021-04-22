@@ -12,20 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Validate arguments
+      - name: ☑ Validate arguments
         if: ${{ !contains(fromJson('["major","minor","build"]'), github.event.inputs.versionIncrement) }}
         run: |
           echo Unexpected versionIncrement specified. It be either "major", "minor" or "build". ${{ github.event.inputs.versionIncrement }} is not a valid value.
           exit 1
     
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Configure GIT
         run: |
           git config user.name "github-actions[bot]"
           git config user.email noreply@github.com
-    
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       
       - name: Nerdbank.GitVersioning
         uses: dotnet/nbgv@v0.4.0
