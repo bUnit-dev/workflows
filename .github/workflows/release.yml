@@ -13,7 +13,6 @@ on:
 jobs:  
   release:
     name: 🎁 Publish new release
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       
@@ -22,11 +21,11 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: 🛒 Switch to release commit (merged PR triggered relases only)
-        if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
-        run: | 
-          git checkout ${{ github.event.pull_request.merge_commit_sha }}
-          git switch -c releasing
+#       - name: 🛒 Switch to release commit (merged PR triggered relases only)
+#         if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
+#         run: | 
+#           git checkout ${{ github.event.pull_request.merge_commit_sha }}
+#           git switch -c releasing
       
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
