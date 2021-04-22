@@ -7,10 +7,10 @@ on:
         description: 'The version increment. Allowed values are "major" and "minor".'
         required: true
         default: 'minor'     
-jobs:
+jobs:  
   prepare-release:
     runs-on: ubuntu-latest
-
+    if: github.ref == 'refs/heads/main' && contains(fromJson('["major","minor"]'), github.event.inputs.versionIncrement)
     steps:
       - name: 🧪 Validate arguments
         if: ${{ !contains(fromJson('["major","minor"]'), github.event.inputs.versionIncrement) }}
@@ -37,12 +37,8 @@ jobs:
         run: |
           nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
           echo "version=$NBGV_MajorMinorVersion" >> $GITHUB_ENV
-        
-        # Only push to main if the release if from main. If it is not, it is likely a emergancy patch 
-        # from another branch, in which case updates to version.json should not be propagated to
-        # the main branch, as it might be newer.
-      - name: ⏩ Push updates to main
-        if: github.ref == 'refs/heads/main'
+         
+      - name: ⏩ Push version.json updates to main
         run: git push origin main
         
       - name: ⏩ Push release branch to origin
