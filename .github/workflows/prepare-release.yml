@@ -44,4 +44,4 @@ jobs:
         run: git push origin main
         
       - name: ⏩ Push release branch to origin
-        run: git push origin release/v${{ version }}
+        run: git push origin release/v$version
