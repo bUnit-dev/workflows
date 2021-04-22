@@ -24,9 +24,7 @@ jobs:
       
       - name: 🛒 Switch to release commit (merged PR triggered relases only)
         if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
-        run: | 
-          git checkout ${{ github.event.pull_request.merge_commit_sha }}
-          git switch -c releasing
+        run: git checkout ${{ github.head_ref }}
       
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
