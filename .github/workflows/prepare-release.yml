@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       versionIncrement:
-        description: 'The version increment. Allowed values are major, minor and build.'
+        description: 'The version increment. Allowed values are "major", "minor" and "build".'
         required: true
         default: 'minor'     
 jobs:
@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Validate arguments
+        if: ${{ github.event.inputs.versionIncrement }} != 'major' && ${{ github.event.inputs.versionIncrement }} != 'minor' && ${{ github.event.inputs.versionIncrement }} != 'build'
+        run: |
+          echo versionIncrement must be either "major", "minor" or "build".
+          exit 1
+    
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
