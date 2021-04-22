@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Validate arguments
-        if: ${{ !contains(['major','minor','build'], github.event.inputs.versionIncrement) }}
+        if: ${{ !contains(fromJson('["major","minor","build"]'), github.event.inputs.versionIncrement) }}
         run: |
           echo Unexpected versionIncrement specified. It be either "major", "minor" or "build". ${{ github.event.inputs.versionIncrement }} is not a valid value.
           exit 1
