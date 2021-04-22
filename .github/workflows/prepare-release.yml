@@ -13,9 +13,9 @@ jobs:
 
     steps:
       - name: Validate arguments
-        if: ${{ github.event.inputs.versionIncrement }} != 'major' && ${{ github.event.inputs.versionIncrement }} != 'minor' && ${{ github.event.inputs.versionIncrement }} != 'build'
+        if: ${{ !contains(['major','minor','build'], github.event.inputs.versionIncrement) }}
         run: |
-          echo versionIncrement must be either "major", "minor" or "build".
+          echo Unexpected versionIncrement specified. It be either "major", "minor" or "build". ${{ github.event.inputs.versionIncrement }} is not a valid value.
           exit 1
     
       - name: Configure GIT
