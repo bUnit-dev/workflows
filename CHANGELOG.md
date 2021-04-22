@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9] - 2021-04-22
+
 ## [1.8] - 2021-04-22
 
 ## [1.7] - 2021-04-22
@@ -21,7 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Something was added.
 
-[Unreleased]: https://github.com/bUnit-dev/workflows/compare/1.8...HEAD
+[Unreleased]: https://github.com/bUnit-dev/workflows/compare/1.9...HEAD
+
+[1.9]: https://github.com/bUnit-dev/workflows/compare/1.8...1.9
 
 [1.8]: https://github.com/bUnit-dev/workflows/compare/1.7...1.8
 
