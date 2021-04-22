@@ -7,12 +7,13 @@ on:
       - main
     types:
       - closed
+
+  workflow_dispatch:
       
 jobs:  
   release:
     name: 🎁 Publish new release
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
     steps:
       
       - name: 🛒 Checkout repository
@@ -20,8 +21,11 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: 🛒 Checkout repository
-        run: git checkout ${{ github.event.pull_request.merge_commit_sha }}
+      - name: 🛒 Switch to release commit (merged PR triggered relases only)
+        if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
+        run: | 
+          git checkout ${{ github.event.pull_request.merge_commit_sha }}
+          git switch -c releasing
       
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
