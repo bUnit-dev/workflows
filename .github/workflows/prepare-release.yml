@@ -1,0 +1,22 @@
+name: prepare-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionIncrement:
+        description: 'The version increment. Allowed values are major, minor and build.'
+        required: true
+        default: 'minor'     
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Nerdbank.GitVersioning
+        uses: dotnet/nbgv@v0.4.0
+          
+      - run: nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
