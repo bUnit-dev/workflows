@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.13] - 2021-04-23
+
 Lorem lipsum content blah blah
 
 more of that
@@ -29,7 +31,9 @@ more of that
 
 -   Something was added.
 
-[Unreleased]: https://github.com/bUnit-dev/workflows/compare/1.11.8...HEAD
+[Unreleased]: https://github.com/bUnit-dev/workflows/compare/1.11.13...HEAD
+
+[1.11.13]: https://github.com/bUnit-dev/workflows/compare/1.11.8...1.11.13
 
 [1.11.8]: https://github.com/bUnit-dev/workflows/compare/1.9...1.11.8
 
