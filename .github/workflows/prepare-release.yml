@@ -20,6 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 🛠️ Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: Unreleased
+          path: ./CHANGELOG.md
+      
       - name: ☑ Check that release contains changes
         if: steps.changelog_reader.outputs.changes == ''
         run: |
