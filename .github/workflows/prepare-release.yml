@@ -54,11 +54,11 @@ jobs:
           
       - name: 🛠️ Increment version.json on main + create release branch
         run: |
-          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
-          echo "{MAIN_VERSION_COMMIT_MESSAGE}={git log --format=%B -n 1}" >> $GITHUB_ENV
+          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
           git reset --hard HEAD~1
+          echo "{MAIN_VERSION_COMMIT_MESSAGE}={git log --format=%B -n 1}" >> $GITHUB_ENV          
           git reset --soft HEAD~1
-          git commit -S -m "$MAIN_VERSION_COMMIT_MESSAGE"
+          git commit -S -m "${{ env.MAIN_VERSION_COMMIT_MESSAGE }}"
           git checkout release/v$NBGV_MajorMinorVersion
           git reset --soft HEAD~1
           git commit -S -m "Set version '$NBGV_MajorMinorVersion'"
