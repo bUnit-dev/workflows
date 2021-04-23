@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: ☑ Check that release contains changes
+        if: steps.changelog_reader.outputs.changes == ''
+        run: |
+          echo "::error file=CHANGELOG.md::The unreleased section in the changelog is empty. Nothing to release."
+
       - name: ⚙️ Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v3
