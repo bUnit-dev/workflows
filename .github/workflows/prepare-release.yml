@@ -20,10 +20,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 🛠️ Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: Unreleased
+          path: ./CHANGELOG.md
+      
       - name: ☑ Check that release contains changes
         if: steps.changelog_reader.outputs.changes == ''
         run: |
           echo "::error file=CHANGELOG.md::The unreleased section in the changelog is empty. Nothing to release."
+          exit 1
 
       - name: ⚙️ Import GPG key
         id: import_gpg
@@ -45,9 +53,24 @@ jobs:
           setAllVars: true
           
       - name: 🛠️ Increment version.json on main + create release branch
+        id: versions
         run: |
-          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
+          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
+          echo "::set-output name=MAIN_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1 --skip 1)"
           git checkout release/v$NBGV_MajorMinorVersion
+          echo "::set-output name=RELEASE_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1)"
+      
+      - name: 🛠️ Sign commits on main and release branch
+        run: |
+          git checkout release/v$NBGV_MajorMinorVersion
+          git reset --soft HEAD~1
+          git commit -S -m "${{ steps.versions.outputs.RELEASE_VERSION_COMMIT_MESSAGE }}"
+          
+          git checkout main
+          git reset --hard HEAD~1
+          git reset --soft HEAD~1
+          git commit -S -m "${{ steps.versions.outputs.MAIN_VERSION_COMMIT_MESSAGE }}"
+          git merge -S -X ours release/v$NBGV_MajorMinorVersion
           
       - name: ⏩ Push version.json updates to main
         run: git push origin main
