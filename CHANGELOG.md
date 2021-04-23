@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.5] - 2021-04-23
+
 CHANGE CHANGE CHANGE
 
 ## [1.12.1] - 2021-04-23
@@ -64,7 +66,9 @@ more of that
 
 -   Something was added.
 
-[Unreleased]: https://github.com/bUnit-dev/workflows/compare/1.12.1...HEAD
+[Unreleased]: https://github.com/bUnit-dev/workflows/compare/1.13.5...HEAD
+
+[1.13.5]: https://github.com/bUnit-dev/workflows/compare/1.12.1...1.13.5
 
 [1.12.1]: https://github.com/bUnit-dev/workflows/compare/1.11.15...1.12.1
 
