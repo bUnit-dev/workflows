@@ -91,4 +91,4 @@ jobs:
           name: Release ${{ env.NBGV_SimpleVersion }}
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
-          prerelease: ${{ fromJson(env.NBGV_PublicRelease) }}
+          prerelease: ${{ env.NBGV_PublicRelease }}
