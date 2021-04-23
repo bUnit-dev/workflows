@@ -35,17 +35,6 @@ jobs:
           nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}
           git checkout release/v$NBGV_MajorMinorVersion
           
-      - name: 🛠️ Update changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
-        with:
-          version: ${{ env.NBGV_MajorMinorVersion }}
-
-      - name: 🛠️ Commit changelog to release branch
-        id: make-commit
-        run: |
-          git add CHANGELOG.md
-          git commit --message "Prepare ${{ github.event.inputs.versionIncrement }} release v${{ env.NBGV_MajorMinorVersion }}"
-
       - name: ⏩ Push version.json updates to main
         run: git push origin main
         
@@ -58,7 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           head: release/v${{ env.NBGV_MajorMinorVersion }}
-          base: ${{ github.ref }}
+          base: stable
           title: Release of new ${{ github.event.inputs.versionIncrement }} version v${{ env.NBGV_MajorMinorVersion }}
           reviewers: ${{ github.actor }} # By default, we request a review from the person who triggered the workflow.
           body: |
@@ -68,5 +57,4 @@ jobs:
             
             Merging this PR will create a GitHub Release and push new packages to NuGet.
             
-            **NOTE:** Only small fixes should be added to this PR at this point. If you need to make minor or major changes, close the PR and make those
-            changes to ${{ github.ref }} instead, and run the prepare-release workflow again once you are done.
+            **NOTE:** Only small fixes should be added to this PR at this point. If you need to make minor or major changes, close the PR and make those changes to ${{ github.ref }} instead, and run the prepare-release workflow again once you are done.
