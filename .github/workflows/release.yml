@@ -37,14 +37,7 @@ jobs:
       - name: 🛠️ Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
         with:
-          version: ${{ env.NBGV_VersionMajor }}.${{ env.NBGV_VersionMinor }}.${{ fromJSON(env.NBGV_BuildNumber) + 1 }}
-
-      - name: 🛠️ Commit CHANGELOG.md to stable branch
-        id: make-commit
-        run: |
-          git add CHANGELOG.md
-          git commit --message "Updated CHANGELOG.md for release"
-          git push origin stable
+          version: ${{ env.NBGV_SimpleVersion }}
 
       - name: ⚙️ Setup dotnet 5.0.x
         uses: actions/setup-dotnet@v1
@@ -73,7 +66,13 @@ jobs:
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
           prerelease: ${{ steps.changelog_reader.outputs.status == 'prereleased' }}
-          
+
+      - name: 🛠️ Commit CHANGELOG.md to stable branch
+        run: |
+          git add CHANGELOG.md
+          git commit --message "Updated CHANGELOG.md for ${{ env.NBGV_SimpleVersion }} release"
+          git push origin stable
+
       - name: ⏩ Merge stable with main
         run: | 
           git checkout main
