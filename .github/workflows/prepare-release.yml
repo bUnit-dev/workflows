@@ -24,6 +24,7 @@ jobs:
         if: steps.changelog_reader.outputs.changes == ''
         run: |
           echo "::error file=CHANGELOG.md::The unreleased section in the changelog is empty. Nothing to release."
+          exit 1
 
       - name: ⚙️ Import GPG key
         id: import_gpg
