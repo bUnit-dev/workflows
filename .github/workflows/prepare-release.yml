@@ -20,10 +20,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: ⚙️ Setup CI GIT
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email noreply@github.com
+      - name: ⚙️ Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.BUNIT_BOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.BUNIT_BOT_GPG_KEY_PASSPHRASE }}
       
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
