@@ -4,11 +4,11 @@ concurrency: 'release'
 on:
   pull_request:
     branches:
-      - main
+      - stable
     types:
       - closed
 
-  workflow_dispatch:
+  workflow_dispatch:      
       
 jobs:  
   release:
@@ -22,15 +22,30 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: 🛒 Switch to release commit (merged PR triggered relases only)
-        if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
-        run: git checkout ${{ github.head_ref }}
+      - name: ⚙️ Setup CI GIT
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email noreply@github.com    
       
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
         with:
-          setAllVars: true     
+          setAllVars: true
+          
+      # TODO: only update CHANGELOG.md if unreleased section is not empty
       
+      - name: 🛠️ Update changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
+        with:
+          version: ${{ env.NBGV_VersionMajor }}.${{ env.NBGV_VersionMinor }}.${{ env.NBGV_BuildNumber + 1 }}
+
+      - name: 🛠️ Commit CHANGELOG.md to stable branch
+        id: make-commit
+        run: |
+          git add CHANGELOG.md
+          git commit --message "Updated CHANGELOG.md for ${{ env.NBGV_VersionMajor }}.${{ env.NBGV_VersionMinor }}.${{ env.NBGV_BuildNumber + 1 }} release"
+          git push origin stable
+
       - name: ⚙️ Setup dotnet 5.0.x
         uses: actions/setup-dotnet@v1
         with:
@@ -44,7 +59,7 @@ jobs:
         uses: mindsers/changelog-reader-action@v2
         with:
           validation_depth: 10
-          version: ${{ env.NBGV_MajorMinorVersion }}
+          version: ${{ env.NBGV_SimpleVersion }}
           path: ./CHANGELOG.md
 
       - name: 🛠️ Create GitHub release
@@ -52,9 +67,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          target_commitish: ${{ github.event.pull_request.merge_commit_sha }}
-          tag_name: v${{ env.NBGV_MajorMinorVersion }}
-          name: Release ${{ steps.changelog_reader.outputs.version }}
+          target_commitish: ${{ GITHUB_SHA }}
+          tag_name: v${{ env.NBGV_SimpleVersion }}
+          name: Release ${{ env.NBGV_SimpleVersion }}
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
-          prerelease: ${{ steps.changelog_reader.outputs.status == 'prereleased' }}        
+          prerelease: ${{ steps.changelog_reader.outputs.status == 'prereleased' }}
+          
+      - name: ⏩ Merge stable with main
+        run: | 
+          git checkout main
+          git merge stable
+          git push origin main
