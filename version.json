@@ -3,7 +3,7 @@
   "version": "1.11",
   "publicReleaseRefSpec": [
     "^refs/heads/stable$"
-  ]
+  ],
   "assemblyVersion": {
     "precision": "revision"
   },
