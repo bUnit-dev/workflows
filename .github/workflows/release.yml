@@ -29,7 +29,7 @@ jobs:
           version: Unreleased
           path: ./CHANGELOG.md
       
-      - name: Ensure release has changes
+      - name: ☑ Check that release contains changes
         if: steps.changelog_reader.outputs.changes == ''
         run: |
           echo "::error file=CHANGELOG.md::The unreleased section in the changelog is empty. Nothing to release."
@@ -52,21 +52,24 @@ jobs:
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
         with:
-          setAllVars: true                
-      
-      - name: 🛠️ Update changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
-        with:
-          version: ${{ env.NBGV_SimpleVersion }}
+          setAllVars: true    
 
       - name: ⚙️ Setup dotnet 5.0.x
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-      
+
       - name: 🛠️ Building library in release mode
         run: dotnet pack -c release -p:ContinuousIntegrationBuild=true -p:PublicRelease=true
-      
+        
+      - name: 🛠️ Upload library to NuGet.org repository
+        run: echo "TODO"
+        
+      - name: 🛠️ Update changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
+        with:
+          version: ${{ env.NBGV_SimpleVersion }}
+
       - name: 🛠️ Commit CHANGELOG.md to stable branch
         run: |
           git add CHANGELOG.md
@@ -88,4 +91,4 @@ jobs:
           name: Release ${{ env.NBGV_SimpleVersion }}
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
-          prerelease: ${{ steps.changelog_reader.outputs.status == 'prereleased' }}
+          prerelease: ${{ fromJson(env.NBGV_PublicRelease) }}
