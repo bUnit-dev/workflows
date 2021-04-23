@@ -31,19 +31,19 @@ jobs:
         uses: dotnet/nbgv@v0.4.0
         with:
           setAllVars: true
-          
+            
       # TODO: only update CHANGELOG.md if unreleased section is not empty
       
       - name: 🛠️ Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
         with:
-          version: ${{ env.NBGV_VersionMajor }}.${{ env.NBGV_VersionMinor }}.${{ env.NBGV_BuildNumber + 1 }}
+          version: ${{ env.NBGV_VersionMajor }}.${{ env.NBGV_VersionMinor }}.${{ fromJSON(env.NBGV_BuildNumber) + 1 }}
 
       - name: 🛠️ Commit CHANGELOG.md to stable branch
         id: make-commit
         run: |
           git add CHANGELOG.md
-          git commit --message "Updated CHANGELOG.md for ${{ env.NBGV_VersionMajor }}.${{ env.NBGV_VersionMinor }}.${{ env.NBGV_BuildNumber + 1 }} release"
+          git commit --message "Updated CHANGELOG.md for release"
           git push origin stable
 
       - name: ⚙️ Setup dotnet 5.0.x
