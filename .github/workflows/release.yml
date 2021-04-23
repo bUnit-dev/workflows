@@ -8,12 +8,12 @@ on:
     types:
       - closed
 
-  workflow_dispatch:      
+  workflow_dispatch:
       
 jobs:  
   release:
     name: 🎁 Publish new release
-    if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
+    if: github.ref == 'refs/heads/stable' || github.event.pull_request.merged == true # only merged pull requests must trigger this job
     runs-on: ubuntu-latest
     steps:
       
@@ -60,7 +60,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          target_commitish: ${{ GITHUB_SHA }}
           tag_name: v${{ env.NBGV_SimpleVersion }}
           name: Release ${{ env.NBGV_SimpleVersion }}
           body: ${{ steps.changelog_reader.outputs.changes }}
