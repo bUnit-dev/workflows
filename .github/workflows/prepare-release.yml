@@ -53,17 +53,23 @@ jobs:
           setAllVars: true
           
       - name: 🛠️ Increment version.json on main + create release branch
+        id: versions
         run: |
           nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
-          git reset --hard HEAD~1
-          echo "{MAIN_VERSION_COMMIT_MESSAGE}=${git log --format=%B -n 1 | xargs}" >> $GITHUB_ENV
-          git reset --soft HEAD~1
-          git commit -S -m $MAIN_VERSION_COMMIT_MESSAGE
+          echo "::set-output name=MAIN_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1 --skip 1)"
           git checkout release/v$NBGV_MajorMinorVersion
-          echo "{RELEASE_VERSION_COMMIT_MESSAGE}=${git log --format=%B -n 1 | xargs}" >> $GITHUB_ENV
+          echo "::set-output name=RELEASE_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1)"
+      
+      - name: 🛠️ Sign commits on main and release branch
+        run:
+          git checkout release/v$NBGV_MajorMinorVersion
           git reset --soft HEAD~1
-          git commit -S -m $RELEASE_VERSION_COMMIT_MESSAGE
+          git commit -S -m ${{ steps.versions.outputs.RELEASE_VERSION_COMMIT_MESSAGE }}
+          
           git checkout main
+          git reset --hard HEAD~1
+          git reset --soft HEAD~1
+          git commit -S -m ${{ steps.versions.outputs.MAIN_VERSION_COMMIT_MESSAGE }}
           git merge -S -X ours release/v$NBGV_MajorMinorVersion
           
       - name: ⏩ Push version.json updates to main
