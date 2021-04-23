@@ -61,15 +61,15 @@ jobs:
           echo "::set-output name=RELEASE_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1)"
       
       - name: 🛠️ Sign commits on main and release branch
-        run:
+        run: |
           git checkout release/v$NBGV_MajorMinorVersion
           git reset --soft HEAD~1
-          git commit -S -m ${{ steps.versions.outputs.RELEASE_VERSION_COMMIT_MESSAGE }}
+          git commit -S -m "${{ steps.versions.outputs.RELEASE_VERSION_COMMIT_MESSAGE }}"
           
           git checkout main
           git reset --hard HEAD~1
           git reset --soft HEAD~1
-          git commit -S -m ${{ steps.versions.outputs.MAIN_VERSION_COMMIT_MESSAGE }}
+          git commit -S -m "${{ steps.versions.outputs.MAIN_VERSION_COMMIT_MESSAGE }}"
           git merge -S -X ours release/v$NBGV_MajorMinorVersion
           
       - name: ⏩ Push version.json updates to main
