@@ -7,6 +7,8 @@ on:
       - stable
     types:
       - closed
+    paths-ignore:
+      - 'docs/**'      
 
   workflow_dispatch:
       
