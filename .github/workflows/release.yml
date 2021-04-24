@@ -113,14 +113,14 @@ jobs:
           echo "CAN_MERGE=true" >> $GITHUB_ENV
       
       - name: ⏩ Merge stable with main, push main        
-        if: ${{ env.CAN_MERGE == "true" }}
+        if: env.CAN_MERGE == "true"
         run: | 
           git merge --abort
           git merge -S stable
           git push origin main
           
       - name: ⏭ Create pull request from stable to main
-        if: ${{ env.CAN_MERGE != "true" }}
+        if: env.CAN_MERGE != "true"
         uses: thomaseizinger/create-pull-request@1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
