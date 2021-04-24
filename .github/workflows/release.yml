@@ -76,9 +76,10 @@ jobs:
           version: ${{ env.NBGV_SimpleVersion }}
       
       - name: 🛠️ Update changelog compare URLs
+        shell: bash
         run: |
           sed -i -E "s/compare\/([0-9]+\.[0-9]+\.[0-9]+)\.\.\.([0-9]+\.[0-9]+\.[0-9]+)/compare\/v\1...v\2/" CHANGELOG.md
-          sed -i -E "s/compare\/([0-9]+\.[0-9]+\.[0-9]+)\.\.\.HEAD/compare\/v\1...HEAD" CHANGELOG.md
+          sed -i -E "s/compare\/([0-9]+\.[0-9]+\.[0-9]+)\.\.\.HEAD/compare\/v\1...HEAD/" CHANGELOG.md
       
       - name: 🛠️ Commit CHANGELOG.md to stable branch
         run: |
