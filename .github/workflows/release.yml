@@ -17,7 +17,7 @@ jobs:
     name: 🎁 Publish new release
     # Only run on manual dispatch or on merged 'release-' pull requests
     if: github.ref == 'refs/heads/stable' || 
-        github.event.pull_request.merged == true && startsWith(github.head_ref, 'refs/heads/release/v') == true
+        github.event.pull_request.merged == true && contains(github.head_ref, 'release/v') == true
     runs-on: ubuntu-latest
     steps:
       
@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          token: ${{ secrets.BUNIT_BOT_TOKEN }}
       
       - name: 🛠️ Get Changelog Entry
         id: changelog_reader
