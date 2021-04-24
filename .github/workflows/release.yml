@@ -100,10 +100,10 @@ jobs:
       - name: 🛠️ Create GitHub release
         uses: thomaseizinger/create-release@1.0.0
         env:
-          GITHUB_TOKEN: ${{ env.RELEASE_COMMIT_HASH }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ env.SIMPLE_VERSION }}
-          target_commitish: $(( git rev-parse stable ))
+          target_commitish: $(( env.RELEASE_COMMIT_HASH ))
           name: Release ${{ env.SIMPLE_VERSION }}
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
