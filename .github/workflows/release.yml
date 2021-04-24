@@ -17,7 +17,7 @@ jobs:
     name: 🎁 Publish new release
     # Only run on manual dispatch or on merged 'release-' pull requests
     if: github.ref == 'refs/heads/stable' || 
-        github.event.pull_request.merged == true && startsWith(github.head_ref, 'refs/heads/release/v') == true
+        github.event.pull_request.merged == true && contains(github.head_ref, 'release/v') == true
     runs-on: ubuntu-latest
     steps:
       
@@ -74,7 +74,13 @@ jobs:
         uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
         with:
           version: ${{ env.NBGV_SimpleVersion }}
-
+      
+      - name: 🛠️ Update changelog compare URLs
+        shell: bash
+        run: |
+          sed -i -E "s/compare\/([0-9]+\.[0-9]+\.[0-9]+)\.\.\.([0-9]+\.[0-9]+\.[0-9]+)/compare\/v\1...v\2/" CHANGELOG.md
+          sed -i -E "s/compare\/([0-9]+\.[0-9]+\.[0-9]+)\.\.\.HEAD/compare\/v\1...HEAD/" CHANGELOG.md
+      
       - name: 🛠️ Commit CHANGELOG.md to stable branch
         run: |
           git add CHANGELOG.md
