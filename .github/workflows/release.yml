@@ -109,17 +109,19 @@ jobs:
         continue-on-error: true
         run: |
           git checkout main
-          git merge --no-commit --no-ff stable ; if [ $? -eq 0 ] ; then echo "CAN_MERGE=true" >> $GITHUB_ENV ; else echo "CAN_MERGE=false" >> $GITHUB_ENV ; fi
+          echo "MERGE_CONFLICT_STATUS=CONFLICT" >> $GITHUB_ENV
+          git merge --no-commit --no-ff stable
+          echo "MERGE_CONFLICT_STATUS=OK" >> $GITHUB_ENV
       
       - name: ⏩ Merge stable with main, push main        
-        if: ${{ env.CAN_MERGE == true }}
+        if: env.MERGE_CONFLICT_STATUS == 'OK'
         run: | 
           git merge --abort
           git merge -S stable
           git push origin main
           
       - name: ⏭ Create pull request from stable to main
-        if: ${{ env.CAN_MERGE == false }}
+        if: env.MERGE_CONFLICT_STATUS == 'CONFLICT'
         uses: thomaseizinger/create-pull-request@1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
