@@ -104,16 +104,25 @@ jobs:
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
           prerelease: ${{ env.NBGV_PublicRelease == 'False' }}
-
-      - name: ⏩ Merge stable with main, push main
+      
+      - name: ☑ Check if merge of stable to main is possible
+        shell: bash
         continue-on-error: true
+        run: |
+          git checkout main
+          git merge --no-commit --no-ff stable
+          echo echo "CAN_MERGE_STABLE_WITH_MAIN=$($? == 0)" >> $GITHUB_ENV
+          git merge --abort
+      
+      - name: ⏩ Merge stable with main, push main        
+        if: ${{ env.CAN_MERGE_STABLE_WITH_MAIN == true }}
         run: | 
           git checkout main
           git merge -S stable
           git push origin main
           
       - name: ⏭ Create pull request from stable to main
-        if: ${{ failure() }}
+        if: ${{ env.CAN_MERGE_STABLE_WITH_MAIN == false }}
         uses: thomaseizinger/create-pull-request@1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
