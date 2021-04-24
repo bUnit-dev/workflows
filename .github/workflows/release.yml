@@ -59,11 +59,9 @@ jobs:
         with:
           setAllVars: true    
 
-      - name: ⚙️ Calculate x.y.z version
-        run: echo "{SIMPLE_VERSION}=$((NBGV_VersionMajor)).$((NBGV_VersionMinor)).$((NBGV_BuildNumber+1))" >> $GITHUB_ENV
-      
-      - run: echo "$SIMPLE_VERSION"
-      
+      - name: ⚙️ Calculate release version in X.Y.Z format
+        run: echo "SIMPLE_VERSION=$((NBGV_VersionMajor)).$((NBGV_VersionMinor)).$((NBGV_BuildNumber+1))" >> $GITHUB_ENV
+            
       - name: ⚙️ Setup dotnet 5.0.x
         uses: actions/setup-dotnet@v1
         with:
@@ -72,7 +70,7 @@ jobs:
       - name: 🛠️ Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.2.1
         with:
-          version: ${{ env.NBGV_SimpleVersion }}
+          version: ${{ env.SIMPLE_VERSION }}
       
       - name: 🛠️ Update changelog compare URLs
         shell: bash
@@ -103,8 +101,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.NBGV_SimpleVersion }}
-          name: Release ${{ env.NBGV_SimpleVersion }}
+          tag_name: v${{ env.SIMPLE_VERSION }}
+          name: Release ${{ env.SIMPLE_VERSION }}
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
           prerelease: ${{ env.NBGV_PublicRelease == 'False' }}
