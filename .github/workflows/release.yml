@@ -13,7 +13,9 @@ on:
 jobs:  
   release:
     name: 🎁 Publish new release
-    if: github.ref == 'refs/heads/stable' || github.event.pull_request.merged == true # only merged pull requests must trigger this job
+    # Only run on manual dispatch or on merged 'release-' pull requests
+    if: github.ref == 'refs/heads/stable' || 
+        github.event.pull_request.merged == true && startsWith(github.ref, 'refs/heads/release-')
     runs-on: ubuntu-latest
     steps:
       
