@@ -108,7 +108,7 @@ jobs:
       - name: ☑ Check if merge of stable to main is possible
         run: |
           git checkout main
-          git merge --no-commit --no-ff stable
+          echo "CAN_MERGE=$(git merge --no-commit --no-ff stable)" >> $GITHUB_ENV
       
       - name: ⏩ Merge stable with main, push main        
         if: ${{ success() }}
