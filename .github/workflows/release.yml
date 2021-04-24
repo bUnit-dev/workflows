@@ -64,7 +64,7 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: 🛠️ Building library in release mode
-        run: dotnet pack -c release -p:ContinuousIntegrationBuild=true -p:PublicRelease=true
+        run: dotnet pack src/ -c release -p:ContinuousIntegrationBuild=true
         
       - name: 🛠️ Upload library to NuGet.org repository
         run: echo "TODO"
