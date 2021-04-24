@@ -7,7 +7,107 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf
+## [1.20.55] - 2021-04-24
+
+ asdf 
+ asdf 
+ asd fdf
+
+## [1.20.52] - 2021-04-24
+
+cnbvvbnvbccnbv
+cvnbvbcnbvc
+
+cvbnvcbnnbvcnbv
+
+cvbnvbcnnbvcnbvc
+
+## [1.20.48] - 2021-04-24
+
+cnbvvbnvbccnbv
+cvnbvbcnbvc
+
+cvbnvcbnnbvcnbv
+
+cvbnvbcnnbvcnbvc
+
+## [1.20.45] - 2021-04-24
+
+ asdf 
+ asdf 
+ asd fdf
+
+ asdf asdf 
+ wef qwef
+
+  terwgret
+   dfghdfgh
+   dtyrh
+   er
+   herth
+
+## [1.20.42] - 2021-04-24
+
+cnbvvbnvbccnbv
+cvnbvbcnbvc
+
+cvbnvcbnnbvcnbv
+
+cvbnvbcnnbvcnbvc
+
+## [1.20.39] - 2021-04-24
+
+ asdf 
+ asdf 
+ asd fdf
+
+ asdf asdf 
+ wef qwef
+
+  terwgret
+   dfghdfgh
+   dtyrh
+   er
+   herth
+
+## [1.20.36] - 2021-04-24
+
+qwer qwer qwer qwer qwer qwer 
+qwerqwer wqer qwer qwer qwer wqer
+
+qwer qwer qwer qwer wqer qwer wqer 
+
+qwer qwerwqerwqerwqerwqerqwe
+
+## [1.20.33] - 2021-04-24
+
+ asdf 
+ asdf asdf 
+ asdf 
+ asfd as
+ df 
+ asdf 
+ asfd a
+ sdf 
+ asdf as
+ df 
+ asdf as
+ f 
+
+## [1.20.30] - 2021-04-24
+
+ asdf 
+ asdf asdf 
+ asdf 
+ asfd as
+ df 
+ asdf 
+ asfd a
+ sdf 
+ asdf as
+ df 
+ asdf as
+ f 
 
 ## [1.20.24] - 2021-04-24
 
@@ -99,7 +199,25 @@ more of that
 
 -   Something was added.
 
-[Unreleased]: https://github.com/bUnit-dev/workflows/compare/v1.20.24...HEAD
+[Unreleased]: https://github.com/bUnit-dev/workflows/compare/v1.20.55...HEAD
+
+[1.20.55]: https://github.com/bUnit-dev/workflows/compare/v1.20.52...v1.20.55
+
+[1.20.52]: https://github.com/bUnit-dev/workflows/compare/v1.20.48...v1.20.52
+
+[1.20.48]: https://github.com/bUnit-dev/workflows/compare/v1.20.45...v1.20.48
+
+[1.20.45]: https://github.com/bUnit-dev/workflows/compare/v1.20.42...v1.20.45
+
+[1.20.42]: https://github.com/bUnit-dev/workflows/compare/v1.20.39...v1.20.42
+
+[1.20.39]: https://github.com/bUnit-dev/workflows/compare/v1.20.36...v1.20.39
+
+[1.20.36]: https://github.com/bUnit-dev/workflows/compare/v1.20.33...v1.20.36
+
+[1.20.33]: https://github.com/bUnit-dev/workflows/compare/v1.20.30...v1.20.33
+
+[1.20.30]: https://github.com/bUnit-dev/workflows/compare/v1.20.24...v1.20.30
 
 [1.20.24]: https://github.com/bUnit-dev/workflows/compare/v1.20.20...v1.20.24
 

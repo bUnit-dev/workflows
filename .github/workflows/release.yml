@@ -82,7 +82,7 @@ jobs:
         run: |
           git add CHANGELOG.md
           git commit -S -m "Updated CHANGELOG.md for ${{ env.NBGV_SimpleVersion }} release"
-          echo "RELEASE_COMMIT_HASH=git rev-parse stable" >> $GITHUB_ENV
+          echo "RELEASE_COMMIT_HASH=$(git rev-parse stable)" >> $GITHUB_ENV
 
       - name: 🛠️ Building library in release mode
         run: dotnet pack src/ -c release -p:ContinuousIntegrationBuild=true
@@ -90,21 +90,45 @@ jobs:
       - name: 🛠️ Upload library to NuGet.org repository
         run: echo "TODO"      
 
-      - name: ⏩ Merge stable with main, push both
-        run: | 
-          git push origin stable
-          git checkout main
-          git merge -S stable
-          git push origin main
-                
+      - name: ⏩ Push stable branch
+        run: git push origin stable
+
       - name: 🛠️ Create GitHub release
         uses: thomaseizinger/create-release@1.0.0
         env:
-          GITHUB_TOKEN: ${{ env.RELEASE_COMMIT_HASH }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ env.SIMPLE_VERSION }}
-          target_commitish: $(( git rev-parse stable ))
+          target_commitish: ${{ env.RELEASE_COMMIT_HASH }}
           name: Release ${{ env.SIMPLE_VERSION }}
           body: ${{ steps.changelog_reader.outputs.changes }}
           draft: false
           prerelease: ${{ env.NBGV_PublicRelease == 'False' }}
+      
+      - name: ☑ Check if merge of stable to main is possible
+        continue-on-error: true
+        run: |
+          git checkout main
+          git merge --no-commit --no-ff stable ; if [ $? -eq 0 ] ; then echo "CAN_MERGE=true" >> $GITHUB_ENV ; else echo "CAN_MERGE=false" >> $GITHUB_ENV ; fi
+      
+      - name: ⏩ Merge stable with main, push main        
+        if: ${{ env.CAN_MERGE == true }}
+        run: | 
+          git merge --abort
+          git merge -S stable
+          git push origin main
+          
+      - name: ⏭ Create pull request from stable to main
+        if: ${{ env.CAN_MERGE == false }}
+        uses: thomaseizinger/create-pull-request@1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          head: stable
+          base: main
+          title: Update main with changes in stable after v${{ env.SIMPLE_VERSION }} release
+          reviewers: ${{ github.actor }} # By default, we request a review from the person who triggered the workflow.
+          body: |
+            Hi @${{ github.actor }}
+            
+            This PR was created because the [release workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed to automatically merge stable into main.
