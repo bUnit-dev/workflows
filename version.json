@@ -1,15 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "1.24-preview",
+  "version": "1.25-preview",
   "assemblyVersion": {
     "precision": "revision"
   },
   "nuGetPackageVersion": {
     "semVer": 2.0
   },
-	"pathFilters": [
-		"./src"
-	],  
   "publicReleaseRefSpec": [
     "^refs/heads/stable$"
   ],
@@ -21,5 +18,8 @@
   "release": {
     "branchName": "release/v{version}",
     "firstUnstableTag": "preview"
-  }
+  },
+  "pathFilters": [
+    "./src"
+  ]
 }
