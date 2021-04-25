@@ -7,6 +7,9 @@
   "nuGetPackageVersion": {
     "semVer": 2.0
   },
+	"pathFilters": [
+		"./src"
+	],  
   "publicReleaseRefSpec": [
     "^refs/heads/stable$"
   ],
