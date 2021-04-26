@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Live streaming on twitch change!
+
 ## [1.24.2] - 2021-04-25
 
 Testing 3 . 2 . 1

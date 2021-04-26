@@ -1,65 +1,77 @@
-# workflows
+# Workflows
 
-Goal:
+The workflows have the goal of automating as much as possible, while keeping workflows flexible to handle odd cases when needed.
 
-1. Follow github flow, e.g. PRs into mainline branch.
-2. Release of mainline
-3. Keep a change log, whose version numbers are automatically updated when a release is pushed
-4. Automatically create github releases, add tags to repo
-5. Automatically push nightly builds on push to mainline to GPR
-6. Allow for live documentation to be updated independently of releases
-7. Allow for docs to be updated with a release.
-8. Release workflows should be idempotent, be re-runable in case of errors
+**NOTE:** whenever I write mainline below, I am referring to whatever is the default branch in a GitHub repository, e.g. `main`.
 
-## common verification steps in PR / build on mainline
-1. build
-2. test
-3. verify template
-4. build docs
-5. build nuget packages   
+**The goals are:**
 
-## Changes to code or documentation for next release:
+1. Follow GitHub flow, e.g. PRs into mainline branch.
+2. Mainline has latest preview/nightly code in unreleased form, and new preview releases is automatically pushed to GitHub Package Repository when source code changes in mainline.
+3. `stable` branch contains latest released code to NuGet.org.
+4. Use "[Keep a change log](https://keepachangelog.com/en/1.0.0/), where mainline has new items in "Unreleased" section, that are automatically moved to a "released versioned" section when released.
+5. Use "[Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning)" to correctly stamp versions, repository references, and commit references in .NET assemblies of both releases and prereleases.
+7. Automatically create GitHub releases and add tags on new release.
+8. Allow for live documentation to be updated independently of releases from stable.
+9. Allow for changes to docs to be updated with a release.
+10. Release workflows should be idempotent, be re-runable in case of errors.
 
-1. Build of mainline
-2. Create PR, include update to changelog.md 
+The workflow examples are located in the usual place in this repository under `.github/workflows`, and are built with the settings defined in the [`version.json`](https://github.com/bUnit-dev/workflows/blob/main/version.json) in mind.
 
-## On merge to mail
+The following sections will list what should happen in the different scenarios involved.
 
-1. Run code analyzers
-2. build nuget packages
-3. push nightly nuget packages to github package repository
+## Changes to code or documentation for next release stored in mainline:
 
-## Create a release:
+1. Locally, make changes from mainline branch. remember to update CHANGELOG.md.
+2. Push to mainline or create a PR targeting mainline, if not authorized to push directly.
 
-1. Trigger prepare-release workflow (input: versionIncrement, releaseImmediately):
-2. nbgv prepare-release --versionIncrement versionIncrement
-3. $version = nbgv get-version
-4. git push main
-5. git checkout release/($version)   
-6. push release branch
+## On push/pull request merged on mainline
 
-## Release
+1. Automatically trigger `verification` workflow.
+2. Automatically trigger `release-preview` workflow if `verification` workflow successed.
 
-1. build
-2. test
-3. verify template
-4. build docs
-5. build nuget packages   
-6. update changelog.md with new version ($version) using keep-a-changelog-new-release
-7.  Create version tag 
-8.  get version
-9.  read changelog from https://github.com/mindsers/changelog-reader-action
-10. create github release with tag, title, and description
-11. Build nuget packages
-12. push nuget packages
-13. merge release branch with origin:mainline
-14. merge mainline to docs_live
-15. merge release branch with origin:docs_live
-16. delete release branch
-   
-## Updates to live docs
+## On pull request (created, updated) to mainline
 
-1. On push (merge of PR or direct push) to docs_live branch
-   1. build docs and push to GH Pages
-   2. merge with FF back to main
-   3. if merge fails, create PR from docs_live to mainline
+1. Automatically trigger `verification` workflow.
+
+## Prepare a new release:
+
+Manually trigger `prepare-release` workflow, specifying if it is a `minor` or `major` release. This does the following:
+
+1. Check that release contains changes, if not, abort. This is verified by looking at the "Unreleased" section in the CHANGELOG.md.
+2. Increment version.json on mainline, e.g. 1.1-preview to 1.2-preview. Push mainline branch to origin.
+3. Create release branch and set version.json in that to non preview, e.g. 1.1. Push release branch to origin.
+4. Create pull request for release branch towards `stable`.
+
+Creating the PR ensures `verification` workflow runs, and gives the option to make small adjustments before release if needed.
+
+TODO: 
+
+- Make it possible to specify that the release PR should be accepted automatically for immidiate release.
+- Use some tooling like https://github.com/fsprojects/SyntacticVersioning/ or changelog analyser to automatically determine if the release is a minor or major release.
+
+## Release:
+
+Automatically trigger `release` workflow on release PR merged with stable, or if it is triggered manaully. This does the following:
+
+1. Check that release contains changes, if not, abort. This is verified by looking at the "Unreleased" section in the CHANGELOG.md.
+2. Update changelog: move content from "unreleased" section to an "[x.y.c] yyyy-mm-dd" section
+3. Commit CHANGELOG.md to `stable` branch
+4. Building library in release mode
+5. Upload library to NuGet.org repository
+6. Push `stable` branch to origin
+7. Create GitHub release from commit with CHANGELOG.md changes on stable. The release is created with the title and content from the CHANGELOG related to the release.
+8. Merge `stable` with mainline and push to origin
+9. If merge between `stable` and mainline fails, then create a PR from `stable` to mainline instead.
+
+The order of these steps are important as they make sure that GitVersioning correctly stamps the generated assemblies/nuget packages with the right version and github commit hash from when the changelog was updated.
+
+## Updates to live docs on `stable`
+
+If a library has a documentation site, the version of the docs should match the latest released version of the library. This, the source for the docs located on the `stable` branch is where the live documentation website is built from.
+
+Since it is not uncommon that fixes and changes to the docs need to happen between releases, changes to the docs sources are the only changes allowed to be pushed to `stable` outside of normal release pull requests. When this happens, the following should happen:
+
+1. Automatically trigger `docs-deploy` workflow, that builds and uploads docs to whatever hosting solution it uses, e.g. GH Pages.
+2. Merge `stable` with mainline branch, such that updated docs are visible in the mainline branch.
+3. If merge between `stable` and mainline fails, then create a PR from `stable` to mainline instead.
