@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.26.0] - 2021-04-26
+
 Seond live streaming on twitch change!
 
 ## [1.25.2] - 2021-04-26
@@ -21,7 +23,9 @@ Testing 3 . 2 . 1
 
 Testing one toooo three
 
-[Unreleased]: https://github.com/bUnit-dev/workflows/compare/v1.25.2...HEAD
+[Unreleased]: https://github.com/bUnit-dev/workflows/compare/v1.26.0...HEAD
+
+[1.26.0]: https://github.com/bUnit-dev/workflows/compare/v1.25.2...v1.26.0
 
 [1.25.2]: https://github.com/bUnit-dev/workflows/compare/v1.24.2...v1.25.2
 
