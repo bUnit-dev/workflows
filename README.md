@@ -14,6 +14,8 @@ The goals are:
 9. Allow for changes to docs to be updated with a release.
 10. Release workflows should be idempotent, be re-runable in case of errors.
 
+The workflow examples are located in the usual place in this repository under `.github/workflows`, and are built with the settings defined in the [`version.json`](https://github.com/bUnit-dev/workflows/blob/main/version.json) in mind.
+
 The following sections will list what should happen in the different scenarios involved.
 
 ## Changes to code or documentation for next release stored in mainline:
