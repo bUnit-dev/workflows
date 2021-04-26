@@ -6,7 +6,7 @@ namespace workflows
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!"); adsf asdf asdf
+            Console.WriteLine("Hello World!");
         }
     }
 }
