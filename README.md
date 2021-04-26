@@ -2,9 +2,11 @@
 
 The workflows have the goal of automating as much as possible, while keeping workflows flexible to handle odd cases when needed.
 
-The goals are:
+**NOTE:** whenever I write mainline below, I am referring to whatever is the default branch in a GitHub repository, e.g. `main`.
 
-1. Follow GitHub flow, e.g. PRs into mainline branch (mainline is whatever is the default branch in a GitHub repository).
+**The goals are:**
+
+1. Follow GitHub flow, e.g. PRs into mainline branch.
 2. Mainline has latest preview/nightly code in unreleased form, and new preview releases is automatically pushed to GitHub Package Repository when source code changes in mainline.
 3. `stable` branch contains latest released code to NuGet.org.
 4. Use "[Keep a change log](https://keepachangelog.com/en/1.0.0/), where mainline has new items in "Unreleased" section, that are automatically moved to a "released versioned" section when released.
