@@ -83,17 +83,17 @@ jobs:
       - name: ⏩ Push release branch to origin
         run: git push origin release/v$NBGV_MajorMinorVersion
 
-      - name: ⏭ Create pull request for release branch
-        uses: thomaseizinger/create-pull-request@1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          head: release/v${{ env.NBGV_MajorMinorVersion }}
-          base: stable
-          title: Release of new ${{ github.event.inputs.versionIncrement }} version v${{ env.NBGV_MajorMinorVersion }}
-          body: |
-            This PR was created in response to a manual trigger of the [prepare-release workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+#       - name: ⏭ Create pull request for release branch
+#         uses: thomaseizinger/create-pull-request@1.0.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           head: release/v${{ env.NBGV_MajorMinorVersion }}
+#           base: stable
+#           title: Release of new ${{ github.event.inputs.versionIncrement }} version v${{ env.NBGV_MajorMinorVersion }}
+#           body: |
+#             This PR was created in response to a manual trigger of the [prepare-release workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
             
-            Merging this PR will create a GitHub Release and push new packages to NuGet.
+#             Merging this PR will create a GitHub Release and push new packages to NuGet.
             
-            **NOTE:** Only small fixes should be added to this PR at this point. If you need to make minor or major changes, close the PR and make those changes to ${{ github.ref }} instead, and run the prepare-release workflow again once you are done.
+#             **NOTE:** Only small fixes should be added to this PR at this point. If you need to make minor or major changes, close the PR and make those changes to ${{ github.ref }} instead, and run the prepare-release workflow again once you are done.
