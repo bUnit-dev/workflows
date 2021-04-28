@@ -9,10 +9,7 @@ on:
       - 'src/**' 
       - 'tests/**' 
     
-  pull_request:
-    branches: 
-      - main
-      - stable    
+  pull_request:    
     types:
       - opened
       - synchronize
