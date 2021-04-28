@@ -2,6 +2,10 @@
 
 The workflows have the goal of automating as much as possible, while keeping workflows flexible to handle odd cases when needed.
 
+Here is a diagram that shows the path from developing a feature/fix to releasing it on NuGet org.
+
+![workflow](workflow.svg)
+
 **NOTE:** whenever I write mainline below, I am referring to whatever is the default branch in a GitHub repository, e.g. `main`.
 
 **The goals are:**
