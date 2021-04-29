@@ -7,17 +7,15 @@ on:
       - stable
     paths:
       - 'src/**' 
-      - 'tests/**' 
-    
+      - 'tests/**'     
   pull_request:
-    branches: 
+    branches:
       - main
-      - stable    
+      - stable
     types:
       - opened
       - synchronize
-      - reopened
-
+      - reopened      
   workflow_dispatch:
 
 jobs:
