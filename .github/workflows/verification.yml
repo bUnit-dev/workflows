@@ -3,15 +3,12 @@ name: verification
 on:
   push:
     branches:
-      - main
-      - stable
+      - main      
     paths:
       - 'src/**' 
-      - 'tests/**'     
+      - 'tests/**'
+      
   pull_request:
-    branches:
-      - main
-      - stable
     types:
       - opened
       - synchronize
