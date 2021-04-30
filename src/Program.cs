@@ -8,6 +8,7 @@ namespace workflows
         {
             Console.WriteLine("Hello World from Twitch!");
             Console.WriteLine("Hello World from Twitch!");
+            Console.WriteLine("Hello World from Twitch!");
         }
     }
 }
