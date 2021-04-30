@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.2] - 2021-04-30
+
 asdfsadfasdf
 
 ## [2.8.2] - 2021-04-30
@@ -43,7 +45,9 @@ Testing 3 . 2 . 1
 
 Testing one toooo three
 
-[Unreleased]: https://github.com/bUnit-dev/workflows/compare/v2.8.2...HEAD
+[Unreleased]: https://github.com/bUnit-dev/workflows/compare/v2.9.2...HEAD
+
+[2.9.2]: https://github.com/bUnit-dev/workflows/compare/v2.8.2...v2.9.2
 
 [2.8.2]: https://github.com/bUnit-dev/workflows/compare/v2.7.0...v2.8.2
 
