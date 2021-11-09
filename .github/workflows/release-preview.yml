@@ -23,13 +23,13 @@ jobs:
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
            
-      - name: ⚙️ Setup dotnet 5.0.x
+      - name: ⚙️ Setup dotnet 6.0.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: '6.0.x'
       
       - name: 🛠️ Building library in release mode
-        run: dotnet pack src/ -c release -p:ContinuousIntegrationBuild=true
+        run: dotnet pack -c release -p:ContinuousIntegrationBuild=true
         
       - name: 🛠️ Upload library to GitHub Package Repository
         run: echo "TODO"              

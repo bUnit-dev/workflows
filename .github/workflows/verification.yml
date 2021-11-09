@@ -26,10 +26,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: ⚙️ Setup dotnet 6.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
         with:
           setAllVars: true
           
       - name: 🛠️ Building library in release mode
-        run: dotnet build src          
+        run: dotnet build          
