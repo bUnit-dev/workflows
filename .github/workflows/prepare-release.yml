@@ -13,7 +13,7 @@ jobs:
   prepare-release:
     name: 🚚 Prepare new release
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && contains(fromJson('["major","minor"]'), github.event.inputs.versionIncrement)
+    if: contains(fromJson('["major","minor"]'), github.event.inputs.versionIncrement)
     steps:   
       - name: 🛒 Checkout repository
         uses: actions/checkout@v2
@@ -33,7 +33,6 @@ jobs:
         run: |
           echo "::error file=CHANGELOG.md::The unreleased section in the changelog is empty. Nothing to release."
           exit 1
-
       - name: ⚙️ Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v3
