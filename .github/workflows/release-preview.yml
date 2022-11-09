@@ -3,18 +3,23 @@ concurrency: 'release-preview'
 
 on:
   workflow_run:
-    branches: [ main ]
     workflows: [ 'verification' ]
-    types: [ completed ]
+    types: [completed]
+    branches: [main, v2]
 
   workflow_dispatch:
+    inputs:
+      nugetRelease:
+        description: 'Release to NuGet? Set to "true" to release to NuGet.org as well as GPR.'
+        required: true
+        default: 'false'
 
 jobs:
   release-preview:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/main' && ${{ github.event.workflow_run.conclusion == 'success' }}) || (github.ref == 'refs/heads/v2' && ${{ github.event.workflow_run.conclusion == 'success' }})
     runs-on: ubuntu-latest
     steps:
-    
+
       - name: 🛒 Checkout repository
         uses: actions/checkout@v2
         with:
@@ -22,14 +27,36 @@ jobs:
 
       - name: ⚙️ Setup GIT versioning
         uses: dotnet/nbgv@v0.4.0
-           
-      - name: ⚙️ Setup dotnet 5.0.x
-        uses: actions/setup-dotnet@v1
+
+      - name: ⚙️ Setup dotnet versions
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '5.0.x'
-      
-      - name: 🛠️ Building library in release mode
-        run: dotnet pack src/ -c release -p:ContinuousIntegrationBuild=true
-        
+          dotnet-version: |
+            3.1.x
+            5.0.x
+            6.0.x
+            7.0.x
+          include-prerelease: true
+
+      - name: 🎨 Setup color
+        run: |
+          echo "DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION=1" >> $GITHUB_ENV
+          echo "TERM=xterm" >> $GITHUB_ENV
+
+      - name: 🛠️ Update tokens in project files
+        uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["*.csproj", "**/*.csproj"]'
+
+      - name: 🛠️ Packing library in release mode
+        run: |
+          dotnet pack -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true -p:publicrelease=true
+          dotnet pack src/bunit/ -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true -p:publicrelease=true
+          dotnet pack src/bunit.template/ -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true -p:publicrelease=true
+
       - name: 🛠️ Upload library to GitHub Package Repository
-        run: echo "TODO"              
+        run: dotnet nuget push ${GITHUB_WORKSPACE}/packages/*.nupkg -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/bunit-dev/index.json --skip-duplicate --no-symbols
+
+      - name: 🛠️ Upload library to NuGet.org repository
+        if: github.event.inputs.nugetRelease == 'true'
+        run: dotnet nuget push ${GITHUB_WORKSPACE}/packages/*.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
