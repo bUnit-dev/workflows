@@ -57,5 +57,5 @@ jobs:
         with:
           setAllVars: true
 
-       - name: 🛠️ Building library in release mode
-        run: dotnet build   
+      - name: 🛠️ Building library in release mode
+        run: dotnet build
