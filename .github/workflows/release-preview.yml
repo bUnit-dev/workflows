@@ -38,25 +38,8 @@ jobs:
             7.0.x
           include-prerelease: true
 
-      - name: 🎨 Setup color
-        run: |
-          echo "DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION=1" >> $GITHUB_ENV
-          echo "TERM=xterm" >> $GITHUB_ENV
-
-      - name: 🛠️ Update tokens in project files
-        uses: cschleiden/replace-tokens@v1
-        with:
-          files: '["*.csproj", "**/*.csproj"]'
-
-      - name: 🛠️ Packing library in release mode
-        run: |
-          dotnet pack -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true -p:publicrelease=true
-          dotnet pack src/bunit/ -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true -p:publicrelease=true
-          dotnet pack src/bunit.template/ -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true -p:publicrelease=true
+      - name: 🛠️ Building library in release mode
+        run: dotnet pack -c release -p:ContinuousIntegrationBuild=true
 
       - name: 🛠️ Upload library to GitHub Package Repository
-        run: dotnet nuget push ${GITHUB_WORKSPACE}/packages/*.nupkg -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/bunit-dev/index.json --skip-duplicate --no-symbols
-
-      - name: 🛠️ Upload library to NuGet.org repository
-        if: github.event.inputs.nugetRelease == 'true'
-        run: dotnet nuget push ${GITHUB_WORKSPACE}/packages/*.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
+        run: echo "TODO"              
